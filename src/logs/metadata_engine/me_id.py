@@ -23,7 +23,8 @@ def meid_md5(entity_type: str, hashing_input: str):
     if hashing_input is None:
         return None
 
-    long_id = _legacy_entity_id_md5(hashing_input)
+    # long_id = _legacy_entity_id_md5(hashing_input)
+    long_id = _murmurhash2_64A(hashing_input, seed=0xe17a1465)
     identifier = _encode_me_identifier(entity_type, long_id)
     return identifier
 
@@ -47,14 +48,14 @@ def meid_murmurhash_awsseed(entity_type: str, hashing_input: str) -> str:
     return identifier
 
 
-def _legacy_entity_id_md5(hash_input: str) -> int:
-    assert hash_input is not None
+# def _legacy_entity_id_md5(hash_input: str) -> int:
+#     assert hash_input is not None
 
-    md5_digest = hashlib.md5(hash_input.encode("UTF-8"))
-    md5_digest_bytes = md5_digest.digest()
-    l1 = int.from_bytes(md5_digest_bytes[0:8], "big", signed=True)
-    l2 = int.from_bytes(md5_digest_bytes[8:16], "big", signed=True)
-    return l1 ^ l2
+#     md5_digest = hashlib.md5(hash_input.encode("UTF-8"))
+#     md5_digest_bytes = md5_digest.digest()
+#     l1 = int.from_bytes(md5_digest_bytes[0:8], "big", signed=True)
+#     l2 = int.from_bytes(md5_digest_bytes[8:16], "big", signed=True)
+#     return l1 ^ l2
 
 
 def _zfrs(num, shift):
